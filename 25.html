@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RLCS 2025 World Championship – Adatok és Elemzés</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #00aaff;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    pre {
+      background-color: #1f1f1f;
+      padding: 10px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+<nav style="
+  background-color: #004080;
+  padding: 10px 20px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  font-weight: bold;
+">
+  <a href="oldal.html" style="color: #ffffff; text-decoration: none;">🎮 Játék bemutatása</a>
+  <a href="esport.html" style="color: #ffffff; text-decoration: none;">🏆 E-sport történelem</a>
+  <a href="25.html" style="color: #ffffff; text-decoration: none;">📊 RLCS 2025 statisztikák</a>
+</nav>
+  <header>
+    <h1>RLCS 2025 World Championship – Adatok</h1>
+  </header>
+
+  <section id="teams-section">
+    <h2>Résztvevő csapatok (2025)</h2>
+    <ul id="teams-list">
+    </ul>
+  </section>
+
+  <section id="lcq-section">
+    <h2>Last Chance Qualifier pontszámok régiónként</h2>
+    <pre id="lcq-json"></pre>
+    <p>A régió, amelyik a legtöbb pontot kapta: <strong id="top-region-output"></strong></p>
+  </section>
+
+  <section id="prize-section">
+    <h2>Díjalap történet és összegzés</h2>
+    <p id="prize-sum-text"></p>
+    <pre id="prize-list"></pre>
+  </section>
+
+  <script>
+    const teams2025 = [
+      "Karmine Corp", "Dignitas", "Team Vitality", "Geekay Esports",
+      "NRG", "The Ultimates", "Spacestation Gaming", "Wildcard",
+      "FURIA Esports", "Team Secret", "Team Falcons", "Twisted Minds",
+      "Gen.G Mobil1 Racing", "TSM", "Virtus.pro", "FUT Esports",
+      "ROC Esports", "MIBR", "Shopify Rebellion", "Ninjas in Pyjamas"
+    ];
+
+    const lcqPointsByRegion = {
+      "Middle East & North Africa": 32,
+      "Europe": 26.75,
+      "North America": 19,
+      "South America": 18,
+      "Asia-Pacific": 10,
+      "Oceania": 8,
+      "Sub-Saharan Africa": 7
+    };
+
+    const prizePoolsHistory = [
+      { year: 2016, prizePool: 150000 },
+      { year: 2017, prizePool: 250000 },
+      { year: 2018, prizePool: 500000 },
+      { year: 2019, prizePool: 1000000 },
+      { year: 2020, prizePool: 1100000 },
+      { year: 2021, prizePool: 1200000 },
+      { year: 2022, prizePool: 2085000 },
+      { year: 2023, prizePool: 1500000 },
+      { year: 2024, prizePool: 1000000 },
+      { year: 2025, prizePool: 1200000 }  
+    ];
+
+
+    const teamsListElem = document.getElementById("teams-list");
+    teams2025.forEach(team => {
+      const li = document.createElement("li");
+      li.textContent = team;
+      teamsListElem.appendChild(li);
+    });
+
+    document.getElementById("lcq-json").textContent =
+      JSON.stringify(lcqPointsByRegion, null, 2);
+
+    let topRegion = null;
+    let maxPts = -Infinity;
+    for (const region in lcqPointsByRegion) {
+      const pts = lcqPointsByRegion[region];
+      if (pts > maxPts) {
+        maxPts = pts;
+        topRegion = region;
+      }
+    }
+    document.getElementById("top-region-output").textContent =
+      `${topRegion} – ${maxPts} pont`;
+
+    let totalPrize = 0;
+    prizePoolsHistory.forEach(item => {
+      totalPrize += item.prizePool;
+    });
+    document.getElementById("prize-sum-text").textContent =
+      `Az összes eddigi Rocket League World Championship díjalap összege: $${totalPrize.toLocaleString()} USD`;
+
+    document.getElementById("prize-list").textContent =
+      prizePoolsHistory
+        .map(item => `${item.year}: $${item.prizePool.toLocaleString()}`)
+        .join("\n");
+  </script>
+</body>
+</html>
